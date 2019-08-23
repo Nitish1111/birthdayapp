@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+    crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+    crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    crossorigin="anonymous"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+
+<script src="./main.js"></script>
+
+<style>
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    .marginT15 {
+        margin-top: 15px
+    }
+</style>
+
+<body>
+    <div class="container" ng-app="myApp" ng-controller='userCtrl'>
+        <div class="col-md-12" style="text-align:center">Happy Birthday</div>
+        <div class="col-md-12">
+            <div class="row marginT15">
+                <div class="col-md-6">Enter Cake total: </div>
+                <div class="col-md-6">
+                    <input type="number" ng-model='cakePrice'>
+                </div>
+
+            </div>
+            <div class="row marginT15">
+                <div class="col-md-6">Enter no. of participants:</div>
+                <div class="col-md-6">
+                    <input type="number" ng-model='peopleCount' ng-disabled="peopleCountCheck">
+                    <input type="checkbox" name="peopleCountCheck" id="peopleCountCheck" ng-model="peopleCountCheck">
+                    <label for="peopleCountCheck">Or select from list</label>
+                </div>
+            </div>
+            <p ng-if="peopleCount&& cakePrice">Per Head:{{cakePrice/peopleCount}}</p>
+
+
+            <div ng-show="peopleCountCheck" id="employyeListDiv">
+                <div class="spinner-grow text-primary" style="width: 4rem; height: 4rem;" id="loader" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+                <div id="error" style="display:none;color:red">
+                    <p>
+                        <span class="glyphicon glyphicon-exclamation-sign"></span>
+                    </p>
+
+                    <p>Sorry we are facing some issues.</p>
+                </div>
+                <div class="checkbox" id="employyeListDiv" style="display:none">
+                    <input type="checkbox" name="item" id="chk-all" ng-model="selectAll" ng-change="toggleAll()">
+                    <label for="chk-all">Select All</label>
+                </div>
+                <div class="checkbox checkbox-inline col-sm-4" ng-repeat="item in employeeList">
+                    <input type="checkbox" name="item.name" id="chk-{{item.name}}" ng-model="item.checked" ng-value="item.name" ng-change="updateCount()">
+                    <label for="chk-{{item.name}}">{{item.name}}</label>
+                </div>
+            </div>
+            <div>
+                <p ng-repeat="items in employeeList| filter: {checked:true}">{{items.name}}</p>
+            </div>
+        </div>
+        <div class="col-md-6"></div>
+    </div>
+
+</body>
+</html>
