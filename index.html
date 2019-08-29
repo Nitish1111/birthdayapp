@@ -20,35 +20,56 @@
         margin: 0;
     }
 
+    .center {
+        text-align: center
+    }
+
     .marginT15 {
         margin-top: 15px
+    }
+    .width80{
+        width:80%;
+    }
+    .margin15{
+      margin:15px;
+    }
+    .floatR{
+        float:right;
+    }
+    .blackBorder{
+        border:1px solid black;
     }
 </style>
 
 <body>
     <div class="container" ng-app="myApp" ng-controller='userCtrl'>
-        <div class="col-md-12" style="text-align:center">Happy Birthday</div>
+        <div class="col-md-12 center">Happy Birthday</div>
         <div class="col-md-12">
             <div class="row marginT15">
-                <div class="col-md-6">Enter Cake total: </div>
-                <div class="col-md-6">
-                    <input type="number" ng-model='cakePrice'>
+                <div class="col-md-6 center">Enter Cake total: </div>
+                <div class="col-md-6 center">
+                    <input type="number" ng-model='cakePrice' ng-change='generateUpi()'>
                 </div>
 
             </div>
             <div class="row marginT15">
-                <div class="col-md-6">Enter no. of participants:</div>
-                <div class="col-md-6">
-                    <input type="number" ng-model='peopleCount' ng-disabled="peopleCountCheck">
-                    <input type="checkbox" name="peopleCountCheck" id="peopleCountCheck" ng-model="peopleCountCheck">
-                    <label for="peopleCountCheck">Or select from list</label>
+                <div class="col-md-6 center">Enter no. of participants:</div>
+                <div class="col-md-6 center">
+                    <input type="number" ng-model='peopleCount' ng-change="generateUpi()" ng-disabled="peopleCountCheck">
+                    <div style="font-size:small;">
+                        <input type="checkbox" name="peopleCountCheck" id="peopleCountCheck" ng-model="peopleCountCheck" ng-click="getEmployeeList()">
+                        <label for="peopleCountCheck">Or select from list</label>
+                    </div>
                 </div>
             </div>
             <p ng-if="peopleCount&& cakePrice">Per Head:{{cakePrice/peopleCount}}</p>
+            <p  ng-if="partyId">Party Id : {{partyId}}
+                    <input type="text"  ng-model="partyId">
 
+            </p>
 
-            <div ng-show="peopleCountCheck" id="employyeListDiv">
-                <div class="spinner-grow text-primary" style="width: 4rem; height: 4rem;" id="loader" role="status">
+            <div class="row marginT15 " ng-show="peopleCountCheck" id="employyeSelectionDiv">
+                <div class="spinner-grow text-primary center" style="width: 4rem; height: 4rem;" id="loader" role="status">
                     <span class="sr-only">Loading...</span>
                 </div>
                 <div id="error" style="display:none;color:red">
@@ -58,21 +79,38 @@
 
                     <p>Sorry we are facing some issues.</p>
                 </div>
-                <div class="checkbox" id="employyeListDiv" style="display:none">
-                    <input type="checkbox" name="item" id="chk-all" ng-model="selectAll" ng-change="toggleAll()">
-                    <label for="chk-all">Select All</label>
+                <div class="col-md-5 blackBorder margin15 width80" ng-show="peopleCountCheck" id="employyeSelectionDiv">
+
+                    <div class="checkbox checkbox-inline col-sm-4" ng-if="employeeListFlag" id="employyeListDivSelectAll">
+                        <input type="checkbox" name="item" id="chk-all" ng-model="selectAll" ng-change="toggleAll()">
+                        <label for="chk-all">Select All</label>
+                    </div>
+                    <div class="checkbox checkbox-inline col-sm-4" ng-if="employeeListFlag" id="employyeListDivSelect" ng-repeat="item in employeeList">
+                        <input type="checkbox" name="item.name" id="chk-{{item.name}}" ng-model="item.checked" ng-value="item.name" ng-change="updateCount()">
+                        <label for="chk-{{item.name}}">{{item.name}}</label>
+                    </div>
+                    <!-- {{peopleCount!=undefined&&peopleCount!=0}}&&{{cakePrice!=undefined&&cakePrice!=0}} -->
+                    <!-- {{cakePrice!=0}} -->
+                    <button ng-if="employeeList" ng-disabled="checkDisablity()" ng-click="finaliseEmployees()" class="btn btn-primary floatR">Finalize</button>
                 </div>
-                <div class="checkbox checkbox-inline col-sm-4" ng-repeat="item in employeeList">
-                    <input type="checkbox" name="item.name" id="chk-{{item.name}}" ng-model="item.checked" ng-value="item.name" ng-change="updateCount()">
-                    <label for="chk-{{item.name}}">{{item.name}}</label>
+                <div class="col-md-5 blackBorder margin15 width80">
+                    <p>Amount to be collected from::</p>
+                    <p ng-repeat="items in finalisedEmployees">{{items.name}}</p>
+                    <button ng-if="employeeList" ng-disabled="checkDisablity()" ng-click="createParty()" class="btn btn-primary floatR">Create Party</button>
+
                 </div>
             </div>
+            <!-- 
             <div>
                 <p ng-repeat="items in employeeList| filter: {checked:true}">{{items.name}}</p>
-            </div>
+            </div> -->
         </div>
-        <div class="col-md-6"></div>
+        <!-- <div class="col-md-6"></div> -->
+        <img ng-if="peopleCount&& cakePrice" ng-src="{{upiImage}}">
+
     </div>
 
+
 </body>
+
 </html>
