@@ -13,33 +13,7 @@
 
 <script src="./main.js"></script>
 
-<style>
-    input[type=number]::-webkit-inner-spin-button,
-    input[type=number]::-webkit-outer-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
-    }
-
-    .center {
-        text-align: center
-    }
-
-    .marginT15 {
-        margin-top: 15px
-    }
-    .width80{
-        width:80%;
-    }
-    .margin15{
-      margin:15px;
-    }
-    .floatR{
-        float:right;
-    }
-    .blackBorder{
-        border:1px solid black;
-    }
-</style>
+<link rel="stylesheet" type="text/css" media="screen" href="main.css" />
 
 <body>
     <div class="container" ng-app="myApp" ng-controller='userCtrl'>
@@ -63,10 +37,7 @@
                 </div>
             </div>
             <p ng-if="peopleCount&& cakePrice">Per Head:{{cakePrice/peopleCount}}</p>
-            <p  ng-if="partyId">Party Id : {{partyId}}
-                    <input type="text"  ng-model="partyId">
-
-            </p>
+            <p ng-if="partyId">Party Id : {{partyId}}</p>
 
             <div class="row marginT15 " ng-show="peopleCountCheck" id="employyeSelectionDiv">
                 <div class="spinner-grow text-primary center" style="width: 4rem; height: 4rem;" id="loader" role="status">
@@ -96,7 +67,8 @@
                 <div class="col-md-5 blackBorder margin15 width80">
                     <p>Amount to be collected from::</p>
                     <p ng-repeat="items in finalisedEmployees">{{items.name}}</p>
-                    <button ng-if="employeeList" ng-disabled="checkDisablity()" ng-click="createParty()" class="btn btn-primary floatR">Create Party</button>
+                    <button ng-if="employeeList" ng-disabled="checkDisablity()" ng-click="createParty()" class="btn btn-primary floatR">Create
+                        Party</button>
 
                 </div>
             </div>
